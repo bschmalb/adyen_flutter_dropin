@@ -70,7 +70,30 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
             ctx = Environment.liveEurope
         }
 
-        let dropInComponentStyle = DropInComponent.Style()
+        let sdYellow: UIColor = UIColor(red: 229 / 255, green: 1, blue: 0 , alpha: 1)
+        let darkBlueishBlack: UIColor = UIColor(red: 33 / 255, green: 33 / 255, blue: 41 / 255, alpha: 1.0)
+
+        var dropInComponentStyle = DropInComponent.Style(tintColor: .darkGray)
+        dropInComponentStyle.navigation.backgroundColor = darkBlueishBlack
+        dropInComponentStyle.navigation.barTitle = TextStyle(font: UIFont.preferredFont(forTextStyle: .title3).adyen.font(with: .semibold), color: .white, textAlignment: .natural)
+        dropInComponentStyle.navigation.cornerRadius = 16
+
+        dropInComponentStyle.listComponent.backgroundColor = darkBlueishBlack
+        dropInComponentStyle.listComponent.listItem.backgroundColor = darkBlueishBlack
+        dropInComponentStyle.listComponent.listItem.title = TextStyle(font: .preferredFont(forTextStyle: .body), color: .white, textAlignment: .natural)
+        dropInComponentStyle.listComponent.listItem.image = ImageStyle(borderColor: .black, borderWidth: 1.0 / UIScreen.main.nativeScale, cornerRadius: 4.0, clipsToBounds: true, contentMode: .scaleAspectFit)
+
+        dropInComponentStyle.formComponent.backgroundColor = darkBlueishBlack
+        dropInComponentStyle.formComponent.footnoteLabel = TextStyle(font: .preferredFont(forTextStyle: .body), color: .green, textAlignment: .natural)
+        dropInComponentStyle.formComponent.textField.title = TextStyle(font: .preferredFont(forTextStyle: .footnote), color: UIColor(red: 1, green: 1, blue:1 , alpha: 0.6), textAlignment: .natural)
+        dropInComponentStyle.formComponent.textField.text = TextStyle(font: UIFont(name: "Courier", size: 18)!, color: .white, textAlignment: .natural)
+        dropInComponentStyle.formComponent.textField.placeholderText = TextStyle(font: UIFont(name: "Courier", size: 18)!, color: UIColor(red: 1, green: 1, blue:1 , alpha: 0.2), textAlignment: .natural)
+        dropInComponentStyle.formComponent.textField.tintColor = .white
+
+        dropInComponentStyle.formComponent.toggle.title = TextStyle(font: .preferredFont(forTextStyle: .body), color: .white, textAlignment: .natural)
+        dropInComponentStyle.formComponent.toggle.tintColor = sdYellow
+
+        dropInComponentStyle.formComponent.mainButtonItem = .main(font: .preferredFont(forTextStyle: .headline), textColor: .black, mainColor: sdYellow, cornerRadius: 24)
 
         let apiContext = APIContext(environment: ctx, clientKey: clientKey!)
         let configuration = DropInComponent.Configuration(apiContext: apiContext);
