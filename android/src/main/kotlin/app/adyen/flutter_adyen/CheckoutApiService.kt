@@ -25,10 +25,10 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface CheckoutApiService {
-    @POST("payments")
+    @POST("payment")
     fun payments(@Body paymentsRequest: RequestBody): Call<PaymentsApiResponse>
 
-    @POST("payments/details")
+    @POST("payment/details")
     fun details(@Body detailsRequest: RequestBody): Call<PaymentsApiResponse>
 }
 
