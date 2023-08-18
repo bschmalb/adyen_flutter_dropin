@@ -90,8 +90,8 @@ An example response from payment methods can be seen here:
 
 The app uses these endpoints for payment submit and payment details calls:
 ```
-<your base url>/payment
-<your base url>/payment/details
+<your base url>/payments
+<your base url>/payments/details
 ```
 The plugin will send data for the payment submit call wrapped into another object like this:
 ```

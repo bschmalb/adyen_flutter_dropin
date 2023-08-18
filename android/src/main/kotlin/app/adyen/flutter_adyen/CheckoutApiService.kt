@@ -25,11 +25,11 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface CheckoutApiService {
-    @POST("payment")
-    fun payments(@Body paymentsRequest: RequestBody): Call<PaymentsApiResponse>
+        @POST("payments")
+        fun payments(@Body paymentsRequest: RequestBody): Call<PaymentsApiResponse>
 
-    @POST("payment/details")
-    fun details(@Body detailsRequest: RequestBody): Call<PaymentsApiResponse>
+        @POST("payments/details")
+        fun details(@Body detailsRequest: RequestBody): Call<PaymentsApiResponse>
 }
 
 class HeaderInterceptor(private val headers: HashMap<String, String>) : Interceptor {
