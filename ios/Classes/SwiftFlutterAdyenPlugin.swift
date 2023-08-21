@@ -59,10 +59,15 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
         headers = arguments?["headers"] as? [String: String]
         mResult = result
 
-        guard let paymentData = paymentMethodsResponse?.data(using: .utf8),
-              let paymentMethods = try? JSONDecoder().decode(PaymentMethods.self, from: paymentData) else {
-            return
-        }
+
+        do {
+    guard let paymentData = paymentMethodsResponse?.data(using: .utf8) else {
+        print("Payment data is nil")
+        return
+    }
+    
+    let paymentMethods = try JSONDecoder().decode(PaymentMethods.self, from: paymentData)
+  
 
         var ctx = Environment.test
         if(environment == "LIVE_US") {
@@ -111,6 +116,10 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
             }
             topController.present(dropIn.viewController, animated: true)
         }
+} catch {
+    print("Payment error with: \(error)")
+}
+
     }
     
     

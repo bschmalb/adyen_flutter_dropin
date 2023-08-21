@@ -151,11 +151,14 @@ To start a Payment you need to call the plugin like so:
             'someKey': 'Some String'
           },
           shopperReference: <YouShopperReference>,
-          returnUrl: 'yourAppScheme://payment', //required for iOS
+          // 'adyencheckout://bundleIdentifier/something'
+          returnUrl: 'adyencheckout://com.example.app/payment',
+          // only allowed environments: LIVE_US, LIVE_AUSTRALIA, LIVE_EUROPE
+          // add more environments at /adyen_flutter/android/src/main/kotlin/app/adyen/flutter_adyen/FlutterAdyenPlugin.kt
           environment: 'TEST',  // add you environment for produciton here: LIVE_US, LIVE_AUSTRALIA or LIVE_EUROPE
           locale: 'de_DE', // your preferred locale
-          publicKey: <your adyen public key>,
-          currency: 'EUR');  // your preferred currency
+          currency: 'EUR', // your preferred currency
+      );
 
 
     } on PlatformException {
