@@ -1,3 +1,6 @@
+## 0.11.0
+* update android sdk to 4.11.0
+
 ## 0.10.0
 * updated Adyen SDK Android to 4.4.0
 * removed jCenter dependency by replacing it for MavenCentral

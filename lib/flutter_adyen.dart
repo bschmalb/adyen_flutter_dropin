@@ -8,45 +8,80 @@ import 'package:flutter/services.dart';
 class FlutterAdyen {
   static const MethodChannel _channel = const MethodChannel('flutter_adyen');
 
-  static Future<AdyenResponse> openDropIn(
-      {paymentMethods,
-      required String baseUrl,
-      required String clientKey,
-      required String publicKey,
-      lineItem,
-      required String locale,
-      required String amount,
-      required String currency,
-      required String returnUrl,
-      required String shopperReference,
-      required Map<String, String> additionalData,
-      Map<String, String>? headers,
-      environment = 'TEST'}) async {
-    Map<String, dynamic> args = {};
-    args.putIfAbsent('paymentMethods', () => paymentMethods);
-    args.putIfAbsent('additionalData', () => additionalData);
-    args.putIfAbsent('baseUrl', () => baseUrl);
-    args.putIfAbsent('clientKey', () => clientKey);
-    args.putIfAbsent('publicKey', () => publicKey);
-    args.putIfAbsent('amount', () => amount);
-    args.putIfAbsent('locale', () => locale);
-    args.putIfAbsent('currency', () => currency);
-    args.putIfAbsent('lineItem', () => lineItem);
-    args.putIfAbsent('returnUrl', () => returnUrl);
-    args.putIfAbsent('environment', () => environment);
-    args.putIfAbsent('shopperReference', () => shopperReference);
-    args.putIfAbsent('headers', () => headers);
-    final response =  await _channel.invokeMethod<String>('openDropIn', args);
+  static Future<AdyenResponse> openDropIn({
+    /// The payment methods to be used in the payment.
+    paymentMethods,
 
-    switch(response) {
+    /// The base URL of your back-end server.
+    /// This is used to retrieve the payment methods and make payments.
+    /// Example: https://your-company.com/api/ or https://your-company.com/
+    required String baseUrl,
+
+    /// The client key used to communicate with the Adyen API.
+    required String clientKey,
+
+    /// The line item to be used in the payment.
+    /// This contains information about the item purchased.
+    lineItem,
+
+    required String locale,
+
+    /// The amount of the payment in cents.
+    required String amount,
+
+    required String currency,
+
+    /// The URL the backend will redirect to after a payment result is received.
+    /// This URL needs to be able to handle the payment result and return to the app.
+    /// The scheme of the URL needs to be registered in the app's Info.plist under URL types.
+    /// adyencheckout://com.example.app/payment
+    required String returnUrl,
+
+    /// The shopper reference to be used in the payment.
+    /// This can be the user ID, or any other unique string that identifies the user.
+    required String shopperReference,
+
+    /// The additional data to be used in the payment.
+    /// This can be used to send any additional data to the server.
+    required Map<String, String> additionalData,
+
+    /// The google pay merchant id to be used in the payment for google pay.
+    String? googlePayMerchantId,
+
+    ///
+    Map<String, String>? headers,
+
+    /// The environment to be used in the payment.
+    /// Only currently available environments are TEST and LIVE_EUROPE, LIVE_US, LIVE_AUSTRALIA.
+    environment = 'TEST',
+  }) async {
+    Map<String, dynamic> args = {
+      'paymentMethods': paymentMethods,
+      'additionalData': additionalData,
+      'baseUrl': baseUrl,
+      'clientKey': clientKey,
+      'amount': amount,
+      'locale': locale,
+      'currency': currency,
+      'lineItem': lineItem,
+      'returnUrl': returnUrl,
+      'environment': environment,
+      'shopperReference': shopperReference,
+      'headers': headers,
+      'googlePayMerchantId': googlePayMerchantId,
+    };
+
+    final response = await _channel.invokeMethod<String>('openDropIn', args);
+
+    switch (response) {
       case 'PAYMENT_ERROR':
         throw AdyenException(AdyenError.PAYMENT_ERROR, response);
       case 'PAYMENT_CANCELLED':
         throw AdyenException(AdyenError.PAYMENT_CANCELLED, response);
     }
 
-    return AdyenResponse.values.firstWhere((element) =>
-    element.name.toLowerCase() == response?.toLowerCase(),
-        orElse: () => throw AdyenException(AdyenError.PAYMENT_ERROR, response));
+    return AdyenResponse.values.firstWhere((element) {
+      return element.name.toLowerCase() == response?.toLowerCase();
+    }, orElse: () => throw AdyenException(AdyenError.PAYMENT_ERROR, response));
   }
 }

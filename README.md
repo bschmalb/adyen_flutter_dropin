@@ -14,7 +14,6 @@ The Plugin supports 3dSecure v2 and one time payment. It was not tested in a rec
 
 ### Credentials
 #### You need to have the following information:
-* publicKey (from Adyen)
 * clientKey (from Adyen)
 * amount & currency 
 * shopperReference (e.g userId)

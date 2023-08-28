@@ -4,5 +4,4 @@ String baseUrl = 'baseUrl';
 String clientKey = 'clientKey';
 String locale = 'nl_NL';
 String currency = 'EUR';
-String publicKey = 'publicKey';
 Map<String, String> headers = {};

@@ -54,6 +54,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    namespace 'app.adyen.flutter_adyen_example'
 }
 
 flutter {

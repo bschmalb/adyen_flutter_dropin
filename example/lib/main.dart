@@ -32,7 +32,6 @@ class _MyAppState extends State<MyApp> {
                   paymentMethods: jsonEncode(examplePaymentMethods),
                   baseUrl: '$baseUrl/',
                   clientKey: clientKey,
-                  publicKey: publicKey,
                   locale: locale,
                   shopperReference: '',
                   returnUrl: 'adyendropin://',
