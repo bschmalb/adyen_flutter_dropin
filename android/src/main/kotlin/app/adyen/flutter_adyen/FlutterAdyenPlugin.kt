@@ -159,9 +159,8 @@ class FlutterAdyenPlugin :
                             .setEnvironment(environment)
 
                     if (googlePayMerchantId != null) {
-                        val amountInt = amount?.toInt() ?: 0
                         val googlePayConfiguration = GooglePayConfiguration.Builder(nonNullActivity, clientKey)
-                            .setAmount(getAmount((amountInt * 100).toString(), currency ?: "EUR"))
+                            .setAmount(getAmount(amount ?: "0", currency ?: "EUR"))
                             .setEnvironment(environment)
                             .setMerchantAccount(googlePayMerchantId)
                             .build()
