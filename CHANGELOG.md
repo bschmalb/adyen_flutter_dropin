@@ -1,5 +1,6 @@
 ## 0.11.0
 * update android sdk to 4.11.0
+* update ios sdk to 5.1.0
 
 ## 0.10.0
 * updated Adyen SDK Android to 4.4.0
