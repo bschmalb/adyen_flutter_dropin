@@ -45,6 +45,9 @@ class FlutterAdyen {
     /// This can be used to send any additional data to the server.
     required Map<String, String> additionalData,
 
+    /// The apple pay pay merchant id to be used in the payment for apple pay.
+    String? applePayMerchantId,
+
     /// The google pay merchant id to be used in the payment for google pay.
     String? googlePayMerchantId,
 
@@ -69,6 +72,7 @@ class FlutterAdyen {
       'shopperReference': shopperReference,
       'headers': headers,
       'googlePayMerchantId': googlePayMerchantId,
+      'applePayMerchantId': applePayMerchantId,
     };
 
     final response = await _channel.invokeMethod<String>('openDropIn', args);

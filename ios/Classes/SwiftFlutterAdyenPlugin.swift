@@ -27,6 +27,7 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
     var dropInComponent: DropInComponent?
     var baseURL: String?
     var clientKey: String?
+    var applePayMerchantId: String?
     var currency: String?
     var amountString: String?
     var amount: Amount?
@@ -49,6 +50,7 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
         baseURL = arguments?["baseUrl"] as? String
         additionalData = arguments?["additionalData"] as? [String: String]
         clientKey = arguments?["clientKey"] as? String
+        applePayMerchantId = arguments?["applePayMerchantId"] as? String
         currency = arguments?["currency"] as? String
         amountString = arguments?["amount"] as? String
         amount = Amount(value: Int(amountString ?? "0") ?? 0, currencyCode: currency ?? "EUR")
@@ -107,6 +109,11 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
             
             let payment = Payment(amount: amount!, countryCode: shopperLocale ?? "DE")
             
+            if let merchantId = applePayMerchantId, !merchantId.isEmpty {
+                if let applePayPayment = try? ApplePayPayment(payment: payment, brand: "") {
+                    configuration.applePay = .init(payment: applePayPayment, merchantIdentifier: merchantId)
+                    configuration.applePay?.allowOnboarding = true
+                }
             }
             
             configuration.card.showsHolderNameField = true
@@ -270,7 +277,7 @@ extension SwiftFlutterAdyenPlugin: DropInComponentDelegate {
                     self.mResult?("PAYMENT_ERROR: \(paymentError.message)")
                 }
             } else {
-                self.mResult?("PAYMENT_ERROR")
+                self.mResult?("PAYMENT_ERROR \(error.localizedDescription)")
             }
             self.topController?.dismiss(animated: true, completion: nil)
         }
