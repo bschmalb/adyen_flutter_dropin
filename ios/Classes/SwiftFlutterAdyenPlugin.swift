@@ -215,8 +215,13 @@ extension SwiftFlutterAdyenPlugin: DropInComponentDelegate {
     
     func finish(data: Data, component: AnyDropInComponent) {
         DispatchQueue.main.async {
+            guard let dataString = String(data: data, encoding: .utf8) else {
+                self.didFail(with: PaymentError(message: "PaymentsResponse: failed to convert data to string"), from: component)
+                return
+            }
+
             guard let response = try? JSONDecoder().decode(PaymentsResponse.self, from: data) else {
-                self.didFail(with: PaymentError(message: "PaymentsResponse parsing failed"), from: component)
+                self.didFail(with: PaymentError(message: "PaymentsResponse: parsing to JSON failed for: \(dataString)"), from: component)
                 return
             }
             if let action = response.action {
