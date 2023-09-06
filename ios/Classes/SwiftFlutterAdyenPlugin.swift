@@ -28,6 +28,7 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
     var baseURL: String?
     var clientKey: String?
     var applePayMerchantId: String?
+    var applePayMerchantName: String?
     var currency: String?
     var amountString: String?
     var amount: Amount?
@@ -51,6 +52,7 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
         additionalData = arguments?["additionalData"] as? [String: String]
         clientKey = arguments?["clientKey"] as? String
         applePayMerchantId = arguments?["applePayMerchantId"] as? String
+        applePayMerchantName = arguments?["applePayMerchantName"] as? String
         currency = arguments?["currency"] as? String
         amountString = arguments?["amount"] as? String
         amount = Amount(value: Int(amountString ?? "0") ?? 0, currencyCode: currency ?? "EUR")
@@ -110,7 +112,7 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
             let payment = Payment(amount: amount!, countryCode: shopperLocale ?? "DE")
             
             if let merchantId = applePayMerchantId, !merchantId.isEmpty {
-                if let applePayPayment = try? ApplePayPayment(payment: payment, brand: "") {
+                if let applePayPayment = try? ApplePayPayment(payment: payment, brand: applePayMerchantName ?? "") {
                     configuration.applePay = .init(payment: applePayPayment, merchantIdentifier: merchantId)
                     configuration.applePay?.allowOnboarding = true
                 }

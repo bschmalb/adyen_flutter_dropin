@@ -23,12 +23,10 @@ class FlutterAdyen {
     /// The line item to be used in the payment.
     /// This contains information about the item purchased.
     lineItem,
-
     required String locale,
 
     /// The amount of the payment in cents.
     required String amount,
-
     required String currency,
 
     /// The URL the backend will redirect to after a payment result is received.
@@ -47,6 +45,9 @@ class FlutterAdyen {
 
     /// The apple pay pay merchant id to be used in the payment for apple pay.
     String? applePayMerchantId,
+
+    /// The apple pay pay merchant name that is shown on the pay modal.
+    String? applePayMerchantName,
 
     /// The google pay merchant id to be used in the payment for google pay.
     String? googlePayMerchantId,
@@ -73,6 +74,7 @@ class FlutterAdyen {
       'headers': headers,
       'googlePayMerchantId': googlePayMerchantId,
       'applePayMerchantId': applePayMerchantId,
+      'applePayMerchantName': applePayMerchantName,
     };
 
     final response = await _channel.invokeMethod<String>('openDropIn', args);
