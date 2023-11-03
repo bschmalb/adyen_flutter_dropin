@@ -1,6 +1,19 @@
 # adyen_flutter_dropin
 
-Note: This library is not official from Adyen.
+Note: This library is not official from Adyen and is a fork of the [flutter_adyen](https://pub.dev/packages/adyen_dropin) package (**not maintained anymore**).
+
+So I decided to fork it and make it work with the latest Adyen SDKs, and some more payment methods.
+
+## Available payment methods
+* Credit Card
+* SEPA Direct Debit
+* iDEAL
+* Sofort
+* Giropay
+* **Apple Pay**
+* **Google Pay**
+* **PayPal**
+* **and more that are not tested yet**
 
 Flutter plugin to integrate with the Android and iOS libraries of Adyen.
 This library enables you to open the **Drop-in** method of Adyen with just calling one function.
@@ -24,7 +37,7 @@ The Plugin supports 3dSecure v2 and one time payment. It was not tested in a rec
 
 ### Payment Methods
 
-Before calling the plugin, make sure to get the **payment methods** from your backend. For this, call the [a /paymentMethods](https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v46/paymentMethods) endpoint:
+Before calling the plugin, make sure to get the **payment methods** from your backend. For this, call the [/paymentMethods](https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/v46/paymentMethods) endpoint:
 
 
 An example response from payment methods can be seen here:
@@ -141,7 +154,8 @@ To start a Payment you need to call the plugin like so:
 ```
  try {
       String dropInResponse = await FlutterAdyen.openDropIn(
-          paymentMethods: paymentMethods,  // the result of your payment methods call
+          // the result of your payment methods call as json string
+          paymentMethods: paymentMethods,
           baseUrl: 'https://your-server.com/',
           clientKey: <ADYEN_CLIENT_KEY>,
           amount: '1000', // amount in cents
@@ -151,6 +165,7 @@ To start a Payment you need to call the plugin like so:
           },
           shopperReference: <YouShopperReference>,
           // 'adyencheckout://bundleIdentifier/something'
+          // but can be anything you want, your backend just needs to redicret to this url after payment
           returnUrl: 'adyencheckout://com.example.app/payment',
           // only allowed environments: LIVE_US, LIVE_AUSTRALIA, LIVE_EUROPE
           // add more environments at /adyen_flutter/android/src/main/kotlin/app/adyen/flutter_adyen/FlutterAdyenPlugin.kt
