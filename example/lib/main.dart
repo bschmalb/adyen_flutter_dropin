@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:adyen_dropin/enums/adyen_response.dart';
-import 'package:adyen_dropin/exceptions/adyen_exception.dart';
-import 'package:adyen_dropin/flutter_adyen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_adyen_dropin/enums/adyen_response.dart';
+import 'package:flutter_adyen_dropin/exceptions/adyen_exception.dart';
+import 'package:flutter_adyen_dropin/flutter_adyen_dropin.dart';
 
 import 'mock_data.dart';
 
@@ -50,8 +50,6 @@ class _MyAppState extends State<MyApp> {
             } catch (e) {
               log(e.toString());
             }
-
-
           },
         ),
         appBar: AppBar(

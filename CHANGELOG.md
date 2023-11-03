@@ -1,3 +1,6 @@
+## 1.0.0
+* rename package to flutter_adyen_dropin to publish to pub.dev
+
 ## 0.11.0
 * update android sdk to 4.11.0
 * update ios sdk to 5.1.0
