@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:adyen_flutter_dropin/enums/adyen_error.dart';
+import 'package:adyen_flutter_dropin/enums/adyen_response.dart';
+import 'package:adyen_flutter_dropin/exceptions/adyen_exception.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_adyen_dropin/enums/adyen_error.dart';
-import 'package:flutter_adyen_dropin/enums/adyen_response.dart';
-import 'package:flutter_adyen_dropin/exceptions/adyen_exception.dart';
 
 class FlutterAdyen {
   static const MethodChannel _channel = const MethodChannel('flutter_adyen');

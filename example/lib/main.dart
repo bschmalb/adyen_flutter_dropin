@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:adyen_flutter_dropin/adyen_flutter_dropin.dart';
+import 'package:adyen_flutter_dropin/enums/adyen_response.dart';
+import 'package:adyen_flutter_dropin/exceptions/adyen_exception.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_adyen_dropin/enums/adyen_response.dart';
-import 'package:flutter_adyen_dropin/exceptions/adyen_exception.dart';
-import 'package:flutter_adyen_dropin/flutter_adyen_dropin.dart';
 
 import 'mock_data.dart';
 

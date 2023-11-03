@@ -1,4 +1,4 @@
-import 'package:flutter_adyen_dropin/enums/adyen_error.dart';
+import 'package:adyen_flutter_dropin/enums/adyen_error.dart';
 
 class AdyenException implements Exception {
   AdyenError error;
