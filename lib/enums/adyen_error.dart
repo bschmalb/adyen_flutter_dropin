@@ -1,4 +1,1 @@
-enum AdyenError {
-  PAYMENT_ERROR,
-  PAYMENT_CANCELLED
-}
+enum AdyenError { PAYMENT_ERROR, PAYMENT_CANCELLED }
