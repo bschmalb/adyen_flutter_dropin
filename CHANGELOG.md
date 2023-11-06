@@ -1,3 +1,8 @@
+## 1.0.1
+* chore: add documentation/comments to code
+* refactor: format code
+* chore: add repository_url to pubspec
+
 ## 1.0.0
 * rename package to adyen_flutter_dropin to publish to pub.dev
 

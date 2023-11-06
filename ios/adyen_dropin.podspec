@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'adyen_dropin'
-  s.version          = '1.0.0'
+  s.version          = '1.0.1'
   s.summary          = 'Flutter plugin to integrate with the Android and iOS libraries of Adyen.'
   s.description      = <<-DESC
 Flutter plugin to integrate with the Android and iOS libraries of Adyen.
