@@ -5,9 +5,12 @@ import 'package:adyen_flutter_dropin/enums/adyen_response.dart';
 import 'package:adyen_flutter_dropin/exceptions/adyen_exception.dart';
 import 'package:flutter/services.dart';
 
+// Create a Dart class named FlutterAdyen
 class FlutterAdyen {
+  // Define a static MethodChannel for communication with native code
   static const MethodChannel _channel = const MethodChannel('flutter_adyen');
 
+  // Define a static method for opening the Adyen payment drop-in
   static Future<AdyenResponse> openDropIn({
     /// The payment methods to be used in the payment.
     paymentMethods,
@@ -59,6 +62,7 @@ class FlutterAdyen {
     /// Only currently available environments are TEST and LIVE_EUROPE, LIVE_US, LIVE_AUSTRALIA.
     environment = 'TEST',
   }) async {
+    // Prepare arguments for the native method call
     Map<String, dynamic> args = {
       'paymentMethods': paymentMethods,
       'additionalData': additionalData,
@@ -77,8 +81,10 @@ class FlutterAdyen {
       'applePayMerchantName': applePayMerchantName,
     };
 
+    // Invoke the native method for opening the Adyen drop-in
     final response = await _channel.invokeMethod<String>('openDropIn', args);
 
+    // Handle different response scenarios and throw exceptions if necessary
     switch (response) {
       case 'PAYMENT_ERROR':
         throw AdyenException(AdyenError.PAYMENT_ERROR, response);
@@ -86,6 +92,7 @@ class FlutterAdyen {
         throw AdyenException(AdyenError.PAYMENT_CANCELLED, response);
     }
 
+    // Return the AdyenResponse based on the response string received
     return AdyenResponse.values.firstWhere((element) {
       return element.name.toLowerCase() == response?.toLowerCase();
     }, orElse: () => throw AdyenException(AdyenError.PAYMENT_ERROR, response));

@@ -1,3 +1,4 @@
+/// Enum for different response scenarios from the Adyen payment flow to flutter.
 enum AdyenResponse {
   AuthenticationFinished,
   AuthenticationNotRequired,

@@ -38,6 +38,7 @@ import okhttp3.MediaType
 import okhttp3.RequestBody
 import org.json.JSONObject
 
+/// Android implementation for the FlutterAdyenPlugin
 class FlutterAdyenPlugin :
     MethodCallHandler, PluginRegistry.ActivityResultListener, FlutterPlugin, ActivityAware {
 
@@ -52,7 +53,7 @@ class FlutterAdyenPlugin :
 
         const val CHANNEL_NAME = "flutter_adyen"
 
-        /** For EmbeddingV1 */
+        /// For v1 embedding
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             FlutterAdyenPlugin().apply {
@@ -63,6 +64,7 @@ class FlutterAdyenPlugin :
         }
     }
 
+    /// Method that handles the method calls from Flutter
     override fun onMethodCall(call: MethodCall, res: Result) {
         when (call.method) {
             "openDropIn" -> {
@@ -76,6 +78,7 @@ class FlutterAdyenPlugin :
 
                 Log.i("[Flutter Adyen]", "Opening Drop In")
 
+                /// Get the arguments from the method call
                 val additionalData =
                     call.argument<Map<String, String>>("additionalData") ?: emptyMap()
                 val paymentMethods = call.argument<String>("paymentMethods")
@@ -102,17 +105,7 @@ class FlutterAdyenPlugin :
                     locale = Locale(localeParts[0], localeParts[1])
                 }
 
-                /*
-                Log.e("[Flutter Adyen]", "Client Key from Flutter: $clientKey")
-                Log.e("[Flutter Adyen]", "Environment from Flutter: $env")
-                Log.e("[Flutter Adyen]", "Locale String from Flutter: $localeString")
-                Log.e("[Flutter Adyen]", "Locale String from Flutter: $paymentMethods")
-                Log.e("[Flutter Adyen]", "Country Code from Flutter: $countryCode")
-                Log.e("[Flutter Adyen]", "Base URL from Flutter: $baseUrl")
-                Log.e("[Flutter Adyen]", "Currency from Flutter: $currency")
-                Log.e("[Flutter Adyen]", "Shopper Reference from Flutter: $shopperReference")
-                */
-
+                /// Set the given adyen environment
                 val environment =
                     when (env) {
                         "LIVE_US" -> Environment.UNITED_STATES
@@ -121,8 +114,7 @@ class FlutterAdyenPlugin :
                         else -> Environment.TEST
                     }
 
-                // Log.e("[Flutter Adyen] ENVIRONMENT", "Resolved environment: $environment")
-
+                /// Try to create the payment methods response from the given json
                 try {
                     val jsonObject = JSONObject(paymentMethods ?: "")
                     val paymentMethodsApiResponse =
@@ -152,6 +144,7 @@ class FlutterAdyenPlugin :
                         commit()
                     }
 
+                    /// Create the drop in configuration
                     val dropInConfigurationBuilder =
                         DropInConfiguration.Builder(nonNullActivity, AdyenDropinService::class.java, clientKey)
                             .addCardConfiguration(cardConfiguration)
@@ -167,6 +160,7 @@ class FlutterAdyenPlugin :
                         dropInConfigurationBuilder.addGooglePayConfiguration(googlePayConfiguration)
                     }
 
+                    /// Start the drop in and show the UI to the user
                     DropIn.startPayment(
                         nonNullActivity,
                         paymentMethodsApiResponse,
@@ -185,7 +179,7 @@ class FlutterAdyenPlugin :
         }
     }
 
-    // region lifecycle
+    /// Method that handles the result from the drop in
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
         if (activity == null) return false
 
@@ -226,12 +220,14 @@ class FlutterAdyenPlugin :
         unbindActivityBinding()
     }
 
+    /// Function that binds the activity to the plugin
     private fun bindActivityBinding(binding: ActivityPluginBinding) {
         this.activity = binding.activity
         this.activityBinding = binding
         addActivityResultListener(binding)
     }
 
+    /// Function that unbinds the activity from the plugin
     private fun unbindActivityBinding() {
         activityBinding?.removeActivityResultListener(this)
         this.activity = null
@@ -245,19 +241,15 @@ class FlutterAdyenPlugin :
     private fun addActivityResultListener(registrar: PluginRegistry.Registrar) {
         registrar.addActivityResultListener(this)
     }
-    // endregion
 }
 
-/**
- * This is just an example on how to make network calls on the [DropInService]. You should make the
- * calls to your own servers and have additional data or processing if necessary.
- */
 @Throws(JsonSyntaxException::class)
 inline fun <reified T> Gson.fromJson(json: String): T? =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
 class AdyenDropinService : DropInService() {
 
+    /// payments call to initiate the payment with all required data
     override fun makePaymentsCall(paymentComponentJson: JSONObject): DropInServiceResult {
         val sharedPref = getSharedPreferences("ADYEN", Context.MODE_PRIVATE)
         val baseUrl = sharedPref.getString("baseUrl", "UNDEFINED_STR")
@@ -354,6 +346,7 @@ class AdyenDropinService : DropInService() {
         }
     }
 
+    /// payments/details call for further validation of the payment
     override fun makeDetailsCall(actionComponentJson: JSONObject): DropInServiceResult {
         val sharedPref = getSharedPreferences("ADYEN", Context.MODE_PRIVATE)
         val baseUrl = sharedPref.getString("baseUrl", "UNDEFINED_STR")
@@ -413,6 +406,7 @@ class AdyenDropinService : DropInService() {
     }
 }
 
+/// Function that creates the payments request that is sent to the backend to make the payment
 fun createPaymentsRequest(
     context: Context,
     lineItem: LineItem?,
@@ -441,8 +435,10 @@ fun createPaymentsRequest(
     )
 }
 
+/// Extension function that creates an amount object from the given amount String and currency
 private fun getAmount(amount: String, currency: String) = createAmount(amount.toInt(), currency)
 
+/// Function that creates an amount object from the given value and currency
 fun createAmount(value: Int, currency: String): Amount {
     val amount = Amount()
     amount.currency = currency
@@ -450,7 +446,7 @@ fun createAmount(value: Int, currency: String): Amount {
     return amount
 }
 
-// region data classes
+/// Data classes that are used to create the payments request
 data class Payment(
     val paymentMethod: PaymentMethodDetails,
     val countryCode: String = "DE",
@@ -465,14 +461,17 @@ data class Payment(
     val shopperReference: String?
 ) : Serializable
 
+/// Data classes that are used to create the payments request
 data class PaymentsRequest(val payment: Payment, val additionalData: Map<String, String>) :
     Serializable
 
+/// Line item data class to show purchased items
 data class LineItem(val id: String, val description: String) : Serializable
 
+/// Additional data class that is used to send data to the backend
 data class AdditionalData(val allow3DS2: String = "true", var executeThreeD: String = "true")
-// endregion
 
+/// Function that serializes the payments request to a json object
 private fun serializePaymentsRequest(paymentsRequest: PaymentsRequest): JSONObject {
     val gson = Gson()
     val jsonString = gson.toJson(paymentsRequest)

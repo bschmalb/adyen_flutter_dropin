@@ -24,14 +24,18 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 
+/// The interface that defines the payment api requests
 interface CheckoutApiService {
+        /// The payments request that initiates a payment
         @POST("payments")
         fun payments(@Body paymentsRequest: RequestBody): Call<PaymentsApiResponse>
 
+        /// The payments/details request that completes a payment if additional details are required
         @POST("payments/details")
         fun details(@Body detailsRequest: RequestBody): Call<PaymentsApiResponse>
 }
 
+/// The interceptor that adds the headers to the requests
 class HeaderInterceptor(private val headers: HashMap<String, String>) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response = chain.run {
         val builder = request().newBuilder()
@@ -40,6 +44,7 @@ class HeaderInterceptor(private val headers: HashMap<String, String>) : Intercep
     }
 }
 
+/// The function that creates the service
 fun getService(headers: HashMap<String, String>, baseUrl: String): CheckoutApiService {
     val moshi = Moshi.Builder()
             .add(PolymorphicJsonAdapterFactory.of(PaymentMethodDetails::class.java, PaymentMethodDetails.TYPE)
@@ -73,6 +78,7 @@ fun getService(headers: HashMap<String, String>, baseUrl: String): CheckoutApiSe
     return retrofit.create(CheckoutApiService::class.java)
 }
 
+/// Data structure for the response from the payments api
 data class PaymentsApiResponse(
         val resultCode: String? = null,
         val paymentData: String? = null,

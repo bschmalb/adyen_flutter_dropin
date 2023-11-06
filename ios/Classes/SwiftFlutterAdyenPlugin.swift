@@ -6,24 +6,30 @@ import Foundation
 import AdyenNetworking
 import PassKit
 
-
+// Define a custom error struct for payment-related errors
 struct PaymentError: Error {
     var message: String
 }
 
+// Define a custom error struct for canceled payments
 struct PaymentCancelled: Error {}
 
+// Create a public class named SwiftFlutterAdyenPlugin that conforms to the FlutterPlugin protocol
 public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
+    // Initialize the plugin
     override
     public init() {}
-    
+
+    // Register the plugin with Flutter
     public static func register(with registrar: FlutterPluginRegistrar) {
+        // Create a method channel for communication with Flutter
         let channel = FlutterMethodChannel(name: "flutter_adyen", binaryMessenger: registrar.messenger())
         let instance = SwiftFlutterAdyenPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
         registrar.addApplicationDelegate(instance)
     }
-    
+
+    // Declare properties to store various configuration settings and data
     var dropInComponent: DropInComponent?
     var baseURL: String?
     var clientKey: String?
@@ -41,11 +47,13 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
     var shopperLocale: String?
     var additionalData: [String: String]?
     var headers: [String: String]?
-    
-    
+
+    // Handle incoming Flutter method calls
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        // Check if the method call is for opening the payment drop-in
         guard call.method.elementsEqual("openDropIn") else { return }
-        
+
+        // Parse arguments from the Flutter method call
         let arguments = call.arguments as? [String: Any]
         let paymentMethodsResponse = arguments?["paymentMethods"] as? String
         baseURL = arguments?["baseUrl"] as? String
@@ -64,7 +72,9 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
         headers = arguments?["headers"] as? [String: String]
         mResult = result
         
+        // Handle the payment flow and user interactions
         do {
+            // Decode payment methods response and configure the drop-in component
             guard let paymentData = paymentMethodsResponse?.data(using: .utf8) else {
                 NSLog("payment data is nil")
                 return
@@ -80,7 +90,8 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
             } else if (environment == "LIVE_EUROPE"){
                 ctx = Environment.liveEurope
             }
-            
+
+            // Set up the UI styling for the drop-in component
             let sdYellow: UIColor = UIColor(red: 229 / 255, green: 1, blue: 0 , alpha: 1)
             let darkBlueishBlack: UIColor = UIColor(red: 33 / 255, green: 33 / 255, blue: 41 / 255, alpha: 1.0)
             
@@ -106,7 +117,8 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
             dropInComponentStyle.formComponent.toggle.tintColor = sdYellow
             
             dropInComponentStyle.formComponent.mainButtonItem = .main(font: .preferredFont(forTextStyle: .headline), textColor: .black, mainColor: sdYellow, cornerRadius: 24)
-            
+
+            // Create and configure the drop-in component
             let configuration = DropInComponent.Configuration()
             
             let payment = Payment(amount: amount!, countryCode: shopperLocale ?? "DE")
@@ -127,7 +139,8 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
             
             dropInComponent = DropInComponent(paymentMethods: paymentMethods, context: adyenContext, configuration: configuration)
             dropInComponent?.delegate = self
-            
+
+            // Present the drop-in component to the user
             if var topController = UIApplication.shared.keyWindow?.rootViewController, let dropIn = dropInComponent {
                 self.topController = topController
                 while let presentedViewController = topController.presentedViewController{
@@ -138,26 +151,28 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
         } catch let error {
             NSLog("Payment error with: \(error.localizedDescription)")
         }
-        
     }
-    
-    
+
+    // Handle URL callback from external sources (e.g., redirect)
     public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         RedirectComponent.applicationDidOpen(from: url)
-        
         return true
     }
 }
 
+// Implement delegate methods for the DropInComponent
 extension SwiftFlutterAdyenPlugin: DropInComponentDelegate {
+    // Handle completion of a payment action
     public func didComplete(from component: ActionComponent, in dropInComponent: AnyDropInComponent) {
         component.stopLoadingIfNeeded()
     }
-    
+
+    // Handle cancellation of a payment
     public func didCancel(component: PaymentComponent, from dropInComponent: AnyDropInComponent) {
         self.didFail(with: PaymentCancelled(), from: dropInComponent)
     }
-    
+
+    // Handle submission of payment data
     public func didSubmit(_ data: PaymentComponentData, from component: PaymentComponent, in dropInComponent: AnyDropInComponent) {
         NSLog("[SwiftFlutterAdyenPlugin] didSubmit")
         guard let baseURL = baseURL, let url = URL(string: baseURL + "payments") else { return }
