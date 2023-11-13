@@ -1,3 +1,6 @@
+## 1.1.0
+* fix: ios podspec setup
+
 ## 1.0.1
 * chore: add documentation/comments to code
 * refactor: format code

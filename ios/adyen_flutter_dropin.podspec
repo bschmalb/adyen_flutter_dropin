@@ -2,8 +2,8 @@
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
 #
 Pod::Spec.new do |s|
-  s.version          = '1.0.1'
   s.name             = 'adyen_flutter_dropin'
+  s.version          = '1.1.0'
   s.summary          = 'Flutter plugin to integrate with the Android and iOS libraries of Adyen.'
   s.description      = <<-DESC
 Flutter plugin to integrate with the Android and iOS libraries of Adyen.
