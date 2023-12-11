@@ -116,7 +116,7 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
             dropInComponentStyle.formComponent.toggle.title = TextStyle(font: .preferredFont(forTextStyle: .body), color: .white, textAlignment: .natural)
             dropInComponentStyle.formComponent.toggle.tintColor = sdYellow
             
-            dropInComponentStyle.formComponent.mainButtonItem = .main(font: .preferredFont(forTextStyle: .headline), textColor: .black, mainColor: sdYellow, cornerRadius: 24)
+            dropInComponentStyle.formComponent.mainButtonItem = .main(font: .preferredFont(forTextStyle: .headline), textColor: .black, mainColor: sdYellow, cornerRadius: 16)
 
             // Create and configure the drop-in component
             let configuration = DropInComponent.Configuration()
