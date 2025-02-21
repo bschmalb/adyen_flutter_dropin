@@ -47,6 +47,8 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
     var shopperLocale: String?
     var additionalData: [String: String]?
     var headers: [String: String]?
+     var backgroundColor: UIColor = .white
+    var accentColor: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
 
     // Handle incoming Flutter method calls
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -71,6 +73,16 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
         shopperLocale = String((arguments?["locale"] as? String)?.split(separator: "_").last ?? "DE")
         headers = arguments?["headers"] as? [String: String]
         mResult = result
+
+
+        if let backgroundColorValue = arguments?["backgroundColor"] as? Int {
+            backgroundColor = UIColor(argb: backgroundColorValue)
+        }
+
+        if let accentColorValue = arguments?["accentColor"] as? Int {
+            accentColor = UIColor(argb: accentColorValue)
+        }
+
         
         // Handle the payment flow and user interactions
         do {
@@ -91,32 +103,28 @@ public class SwiftFlutterAdyenPlugin: NSObject, FlutterPlugin {
                 ctx = Environment.liveEurope
             }
 
-            // Set up the UI styling for the drop-in component
-            let sdYellow: UIColor = UIColor(red: 229 / 255, green: 1, blue: 0 , alpha: 1)
-            let darkBlueishBlack: UIColor = UIColor(red: 33 / 255, green: 33 / 255, blue: 41 / 255, alpha: 1.0)
-            
             var dropInComponentStyle = DropInComponent.Style(tintColor: .darkGray)
-            dropInComponentStyle.navigation.backgroundColor = darkBlueishBlack
+            dropInComponentStyle.navigation.backgroundColor = backgroundColor
             dropInComponentStyle.navigation.barTitle = TextStyle(font: .systemFont(ofSize: 24, weight: .semibold), color: .white, textAlignment: .natural)
             dropInComponentStyle.navigation.cornerRadius = 16
             
             dropInComponentStyle.navigation.toolbarMode = ToolbarMode.leftCancel
             
-            dropInComponentStyle.listComponent.backgroundColor = darkBlueishBlack
-            dropInComponentStyle.listComponent.listItem.backgroundColor = darkBlueishBlack
+            dropInComponentStyle.listComponent.backgroundColor = backgroundColor
+            dropInComponentStyle.listComponent.listItem.backgroundColor = backgroundColor
             dropInComponentStyle.listComponent.listItem.title = TextStyle(font: .preferredFont(forTextStyle: .body), color: .white, textAlignment: .natural)
             dropInComponentStyle.listComponent.listItem.image = ImageStyle(borderColor: .black, borderWidth: 1.0 / UIScreen.main.nativeScale, cornerRadius: 4.0, clipsToBounds: true, contentMode: .scaleAspectFit)
             
-            dropInComponentStyle.formComponent.backgroundColor = darkBlueishBlack
+            dropInComponentStyle.formComponent.backgroundColor = backgroundColor
             dropInComponentStyle.formComponent.textField.title = TextStyle(font: .preferredFont(forTextStyle: .footnote), color: UIColor(red: 1, green: 1, blue:1 , alpha: 0.6), textAlignment: .natural)
             dropInComponentStyle.formComponent.textField.text = TextStyle(font: UIFont(name: "Courier", size: 18)!, color: .white, textAlignment: .natural)
             dropInComponentStyle.formComponent.textField.placeholderText = TextStyle(font: UIFont(name: "Courier", size: 18)!, color: UIColor(red: 1, green: 1, blue:1 , alpha: 0.2), textAlignment: .natural)
             dropInComponentStyle.formComponent.textField.tintColor = .white
             
             dropInComponentStyle.formComponent.toggle.title = TextStyle(font: .preferredFont(forTextStyle: .body), color: .white, textAlignment: .natural)
-            dropInComponentStyle.formComponent.toggle.tintColor = sdYellow
+            dropInComponentStyle.formComponent.toggle.tintColor = accentColor
             
-            dropInComponentStyle.formComponent.mainButtonItem = .main(font: .preferredFont(forTextStyle: .headline), textColor: .black, mainColor: sdYellow, cornerRadius: 16)
+            dropInComponentStyle.formComponent.mainButtonItem = .main(font: .preferredFont(forTextStyle: .headline), textColor: .black, mainColor: accentColor, cornerRadius: 16)
 
             // Create and configure the drop-in component
             let configuration = DropInComponent.Configuration()

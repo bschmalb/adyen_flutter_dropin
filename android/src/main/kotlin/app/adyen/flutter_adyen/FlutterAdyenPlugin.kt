@@ -1,5 +1,6 @@
 package app.adyen.flutter_adyen
 
+import android.graphics.Color
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -91,6 +92,14 @@ class FlutterAdyenPlugin :
                 val shopperReference = call.argument<String>("shopperReference")
                 val headers = call.argument<Map<String, String>>("headers")
                 val googlePayMerchantId = call.argument<String?>("googlePayMerchantId")
+
+                // Retrieve backgroundColor and accentColor arguments
+                val backgroundColorValue = call.argument<Int>("backgroundColor")
+                val accentColorValue = call.argument<Int>("accentColor")
+
+                // Provide fallback colors if not provided
+                val backgroundColor = backgroundColorValue?.let { Color(it) } ?: Color.WHITE
+                val accentColor = accentColorValue?.let { Color(it) } ?: Color.rgb(0, 0, 0) // Dark gray color
 
                 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
                 val lineItemString = JSONObject(lineItem).toString()

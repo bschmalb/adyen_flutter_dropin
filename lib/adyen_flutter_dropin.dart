@@ -58,6 +58,13 @@ class FlutterAdyen {
     ///
     Map<String, String>? headers,
 
+    /// The color that is used as the background color of the drop-in.
+    Color? backgroundColor,
+
+    /// The color that is used as the accent color of the drop-in.
+    /// This color is used for buttons and other accents in the drop-in.
+    Color? accentColor,
+
     /// The environment to be used in the payment.
     /// Only currently available environments are TEST and LIVE_EUROPE, LIVE_US, LIVE_AUSTRALIA.
     environment = 'TEST',
@@ -79,6 +86,8 @@ class FlutterAdyen {
       'googlePayMerchantId': googlePayMerchantId,
       'applePayMerchantId': applePayMerchantId,
       'applePayMerchantName': applePayMerchantName,
+      'backgroundColor': backgroundColor?.value,
+      'accentColor': accentColor?.value,
     };
 
     // Invoke the native method for opening the Adyen drop-in
