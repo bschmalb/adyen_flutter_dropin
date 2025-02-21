@@ -1,3 +1,7 @@
+## 1.2.0
+
+- feat: add parameters for coloring ios dropin
+
 ## 1.1.1
 
 - style: change pay button border radius to 16
