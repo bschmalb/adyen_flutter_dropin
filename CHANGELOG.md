@@ -1,3 +1,7 @@
+## 1.2.1
+
+- fix: android color parsing
+
 ## 1.2.0
 
 - feat: add parameters for coloring ios dropin
