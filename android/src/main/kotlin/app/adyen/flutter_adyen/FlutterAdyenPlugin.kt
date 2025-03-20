@@ -94,14 +94,14 @@ class FlutterAdyenPlugin :
                 val googlePayMerchantId = call.argument<String?>("googlePayMerchantId")
 
                 // Retrieve backgroundColor and accentColor arguments
-                val backgroundColorValue = call.argument<Int>("backgroundColor")
-                val accentColorValue = call.argument<Int>("accentColor")
+                // val backgroundColorValue = call.argument<Long>("backgroundColor")
+                // val accentColorValue = call.argument<Long>("accentColor")
 
                 // Provide fallback colors if not provided
-                val backgroundColor =
-                        backgroundColorValue?.let { Color.valueOf(it.toLong()) } ?: Color.WHITE
-                val accentColor =
-                        accentColorValue?.let { Color.valueOf(it.toLong()) } ?: Color.rgb(0, 0, 0)
+                // val backgroundColor =
+                // backgroundColorValue?.let { Color.valueOf(it.toLong()) } ?: Color.WHITE
+                // val accentColor =
+                // accentColorValue?.let { Color.valueOf(it.toLong()) } ?: Color.rgb(0, 0, 0)
 
                 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
                 val lineItemString = JSONObject(lineItem).toString()
