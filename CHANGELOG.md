@@ -1,3 +1,7 @@
+## 1.2.2
+
+- fix: android color parsing error
+
 ## 1.2.1
 
 - fix: android color parsing
